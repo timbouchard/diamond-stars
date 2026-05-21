@@ -169,7 +169,8 @@
   }
   function sfxTick() {
     // A quick light tap — used for any button or base touch
-    playTone(880, 0.04, 'triangle', 0.08);
+    // Lower pitch + higher volume + longer duration so iPad speakers can reproduce it
+    playTone(523, 0.09, 'triangle', 0.25);
   }
 
   // ---------- Game logic ----------

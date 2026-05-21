@@ -80,6 +80,34 @@ html, body {
   line-height: 1;
 }
 
+.reset-btn {
+  background: #FFFFFF;
+  border: 2px solid #2C2C2A;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 700;
+  color: #5F5E5A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 0 #2C2C2A;
+  padding: 0;
+  align-self: center;
+  font-family: inherit;
+  transition: background 0.15s ease;
+}
+.reset-btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 #2C2C2A; }
+.reset-btn.confirm {
+  background: #E24B4A;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
 /* ---------- controls row ---------- */
 .controls {
   display: flex;

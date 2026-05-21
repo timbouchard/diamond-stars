@@ -216,6 +216,11 @@
     setTimeout(() => el.removeAttribute('data-fresh'), 400);
   }
 
+  // Safari iPad doesn't reliably toggle visibility via the .hidden property on SVG elements.
+  // Use the attribute directly for SVG.
+  function showSvg(id) { $(id).removeAttribute('hidden'); }
+  function hideSvg(id) { $(id).setAttribute('hidden', ''); }
+
   function updateStatsDisplay() {
     $('stat-correct').textContent = state.stats.correct;
     $('stat-streak').textContent = state.stats.streak;
@@ -240,7 +245,7 @@
 
   // ---------- Fielder ----------
   function placeFielder(x, y, color) {
-    $('fielder').hidden = false;
+    showSvg('fielder');
     $('fielder-shadow').setAttribute('cx', x);
     $('fielder-shadow').setAttribute('cy', y + 12);
     $('fielder-body').setAttribute('cx', x);
@@ -297,7 +302,7 @@
     $('scenario-box').hidden = true;
     $('feedback-box').hidden = true;
     $('next-btn').hidden = true;
-    $('throw-path').setAttribute('hidden', '');
+    hideSvg('throw-path');
     $('runners').innerHTML = '';
     freshen($('teach-box'));
   }
@@ -307,10 +312,10 @@
     state.answered = false;
     $('feedback-box').hidden = true;
     $('next-btn').hidden = true;
-    $('throw-path').setAttribute('hidden', '');
-    $('flying-ball').hidden = true;
+    hideSvg('throw-path');
+    hideSvg('flying-ball');
     $('celebration').innerHTML = '';
-    $('celebration').hidden = true;
+    hideSvg('celebration');
 
     const pos = POSITIONS[state.position];
     $('scenario-label').textContent = 'You play ' + pos.name;
@@ -342,7 +347,7 @@
     pathEl.removeAttribute('hidden');
 
     const ball = $('flying-ball');
-    ball.hidden = false;
+    ball.removeAttribute('hidden');
 
     const totalLength = pathEl.getTotalLength();
     const duration = 700;
@@ -369,7 +374,7 @@
   function celebrate(x, y) {
     const cel = $('celebration');
     cel.innerHTML = '';
-    cel.hidden = false;
+    cel.removeAttribute('hidden');
 
     const out = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     out.setAttribute('class', 'out-text');
@@ -429,7 +434,7 @@
     setTimeout(() => sfxConfetti(), 350);
 
     setTimeout(() => {
-      cel.hidden = true;
+      cel.setAttribute('hidden', '');
       cel.innerHTML = '';
     }, 2200);
   }
@@ -559,15 +564,15 @@
       $('change-pos-btn').hidden = true;
       $('teach-box').hidden = true;
       $('scenario-box').hidden = false;
-      $('fielder').hidden = true;
+      hideSvg('fielder');
       $('scenario-label').textContent = 'Play';
       $('scenario-text').textContent = 'Pick a position to play!';
       $('feedback-box').hidden = true;
       $('next-btn').hidden = true;
-      $('throw-path').setAttribute('hidden', '');
-      $('flying-ball').hidden = true;
+      hideSvg('throw-path');
+      hideSvg('flying-ball');
       $('celebration').innerHTML = '';
-      $('celebration').hidden = true;
+      hideSvg('celebration');
       $('runners').innerHTML = '';
     });
   }

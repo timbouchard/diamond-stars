@@ -1,5 +1,5 @@
 // Diamond Stars service worker — offline support
-const CACHE_NAME = 'diamond-stars-v6';
+const CACHE_NAME = 'diamond-stars-v7';
 const ASSETS = [
   './',
   './index.html',

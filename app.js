@@ -167,6 +167,10 @@
     // A quick "OUT!" call: descending growl
     playSweep(180, 90, 0.45, 'sawtooth', 0.18);
   }
+  function sfxTick() {
+    // A quick light tap — used for any button or base touch
+    playTone(880, 0.04, 'triangle', 0.08);
+  }
 
   // ---------- Game logic ----------
   function describeRunners(r) {
@@ -509,6 +513,15 @@
     buildPositionButtons();
     updateStatsDisplay();
     updateMuteDisplay();
+
+    // Universal tick on button or base tap, except for buttons that play their own sound
+    document.addEventListener('click', (e) => {
+      const t = e.target.closest('button, .base');
+      if (!t) return;
+      // Skip elements that already play their own sound
+      if (t.id === 'mute-btn' || t.id === 'reset-btn') return;
+      sfxTick();
+    });
 
     // Level toggle
     document.querySelectorAll('.lvl-btn').forEach((btn) => {

@@ -541,6 +541,35 @@
       }
     });
 
+    // Reset stats — two-tap confirm to avoid accidental wipes
+    let resetArmed = false;
+    let resetTimer = null;
+    const resetBtn = $('reset-btn');
+    const resetIcon = $('reset-icon');
+    resetBtn.addEventListener('click', () => {
+      if (!resetArmed) {
+        resetArmed = true;
+        resetBtn.classList.add('confirm');
+        resetIcon.textContent = 'Sure?';
+        resetTimer = setTimeout(() => {
+          resetArmed = false;
+          resetBtn.classList.remove('confirm');
+          resetIcon.textContent = '↻';
+        }, 3000);
+        return;
+      }
+      // Confirmed — wipe stats
+      clearTimeout(resetTimer);
+      state.stats = { correct: 0, streak: 0, bestStreak: 0 };
+      updateStatsDisplay();
+      saveState();
+      resetArmed = false;
+      resetBtn.classList.remove('confirm');
+      resetIcon.textContent = '↻';
+      playTone(440, 0.08, 'sine', 0.12);
+      playTone(330, 0.12, 'sine', 0.12);
+    });
+
     // Base clicks
     document.querySelectorAll('.base').forEach((el) => {
       el.addEventListener('click', () => handleBaseClick(el.dataset.base));

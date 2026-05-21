@@ -7,19 +7,19 @@
     P:  { name: 'Pitcher',    x: 200, y: 248, color: '#E24B4A',
           job: 'You stand in the middle. You throw the ball to start. Then you catch it if it comes back to you.',
           tip: 'Most times, you throw to 1st base.' },
-    C:  { name: 'Catcher',    x: 200, y: 385, color: '#F4B942',
+    C:  { name: 'Catcher',    x: 200, y: 385, color: '#E24B4A',
           job: 'You sit by home plate. You catch the ball when the pitcher throws it.',
           tip: 'If a girl runs to home, you tag her out!' },
-    '1B': { name: '1st base', x: 272, y: 258, color: '#378ADD',
+    '1B': { name: '1st base', x: 272, y: 258, color: '#E24B4A',
           job: 'You stand by 1st base. You catch a lot of throws here.',
           tip: 'Touch the base with your foot when you catch the ball.' },
-    '2B': { name: '2nd base', x: 238, y: 200, color: '#7F77DD',
+    '2B': { name: '2nd base', x: 238, y: 200, color: '#E24B4A',
           job: 'You play near 2nd base. Lots of balls come to you.',
           tip: 'Throw to 1st if no one is on base yet.' },
-    SS: { name: 'Short stop', x: 162, y: 200, color: '#1D9E75',
+    SS: { name: 'Short stop', x: 162, y: 200, color: '#E24B4A',
           job: 'You play between 2nd and 3rd. You get lots of balls!',
           tip: 'You are close to 2nd and 3rd. You can throw there fast.' },
-    '3B': { name: '3rd base', x: 128, y: 258, color: '#D85A30',
+    '3B': { name: '3rd base', x: 128, y: 258, color: '#E24B4A',
           job: 'You stand by 3rd base. Fast balls come right at you.',
           tip: 'Your throw to 1st is a long one. Use a big arm!' },
   };
@@ -262,7 +262,7 @@
 
   // ---------- Runners ----------
   function drawRunner(x, y, idx) {
-    const colors = ['#E24B4A', '#D85A30', '#A32D2D'];
+    const colors = ['#378ADD', '#185FA5', '#0C447C'];
     const skin = ['#FDD7B0', '#E0AC7E', '#C68B5A'];
     const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     g.innerHTML =
@@ -405,18 +405,22 @@
       const cy = y - 30;
       const color = confettiColors[Math.floor(Math.random() * confettiColors.length)];
       const dx = (Math.random() - 0.5) * 200;
-      const piece = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      piece.setAttribute('x', cx);
-      piece.setAttribute('y', cy);
-      piece.setAttribute('width', 6);
-      piece.setAttribute('height', 10);
-      piece.setAttribute('fill', color);
-      piece.setAttribute('rx', 1);
-      piece.setAttribute('class', 'confetti-piece');
-      piece.style.setProperty('--dx', dx + 'px');
-      piece.style.animationDelay = (Math.random() * 200) + 'ms';
-      piece.style.transformOrigin = (cx + 3) + 'px ' + (cy + 5) + 'px';
-      cel.appendChild(piece);
+      const delay = (Math.random() * 0.2).toFixed(3);
+      const rotEnd = 360 + Math.floor(Math.random() * 360);
+
+      // Use SVG native animation (SMIL) — works reliably on Safari iOS
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      g.innerHTML =
+        '<rect x="-3" y="-5" width="6" height="10" rx="1" fill="' + color + '">' +
+          '<animateTransform attributeName="transform" type="translate" ' +
+            'from="' + cx + ',' + cy + '" to="' + (cx + dx) + ',' + (cy + 220) + '" ' +
+            'begin="' + delay + 's" dur="1.6s" fill="freeze" calcMode="spline" keySplines="0.42 0 1 1"/>' +
+          '<animateTransform attributeName="transform" type="rotate" additive="sum" ' +
+            'from="0" to="' + rotEnd + '" begin="' + delay + 's" dur="1.6s" fill="freeze"/>' +
+          '<animate attributeName="opacity" from="1" to="0" ' +
+            'begin="' + delay + 's" dur="1.6s" fill="freeze" calcMode="spline" keySplines="0.6 0 1 1"/>' +
+        '</rect>';
+      cel.appendChild(g);
     }
 
     // sounds

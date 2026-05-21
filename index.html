@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#1D9E75" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Diamond Stars" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/icon-180.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png" />
+
+  <title>Diamond Stars — Softball Fielding</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="top-bar">
+      <div class="title-block">
+        <h1>Diamond Stars</h1>
+        <p class="sub">Softball Fielding</p>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-label">Outs</span>
+          <span class="stat-value" id="stat-correct">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Streak</span>
+          <span class="stat-value" id="stat-streak">0</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="controls">
+      <div class="level-toggle" role="tablist" aria-label="Level">
+        <span class="level-label">Level:</span>
+        <button class="lvl-btn lvl-active" data-level="basic" aria-pressed="true">Easy</button>
+        <button class="lvl-btn" data-level="advanced" aria-pressed="false">Hard</button>
+      </div>
+      <button id="change-pos-btn" class="ghost-btn" hidden>New position</button>
+      <button id="mute-btn" class="icon-btn" aria-label="Sound on or off" title="Sound on or off">
+        <span id="mute-icon" aria-hidden="true">🔊</span>
+      </button>
+    </div>
+
+    <div id="pos-picker" class="pos-picker">
+      <p class="picker-label">Pick your position</p>
+      <div id="pos-buttons" class="pos-buttons"></div>
+    </div>
+
+    <div id="teach-box" class="teach-box" hidden>
+      <p class="teach-label">Your job</p>
+      <p class="teach-title" id="teach-title"></p>
+      <p class="teach-body" id="teach-body"></p>
+      <button id="teach-start-btn" class="big-play-btn">Let's play! →</button>
+    </div>
+
+    <div id="scenario-box" class="scenario-box">
+      <p class="scenario-label" id="scenario-label">Play</p>
+      <p class="scenario-text" id="scenario-text">Pick a position to play!</p>
+    </div>
+
+    <div class="field-wrap">
+      <svg id="diamond" viewBox="0 0 400 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="diamond-title diamond-desc">
+        <title id="diamond-title">Softball diamond</title>
+        <desc id="diamond-desc">A cartoon softball field with bases. Tap a base to throw the ball there.</desc>
+
+        <defs>
+          <radialGradient id="grass-grad" cx="50%" cy="50%" r="60%">
+            <stop offset="0%" stop-color="#A8E063" />
+            <stop offset="100%" stop-color="#56A540" />
+          </radialGradient>
+          <radialGradient id="dirt-grad" cx="50%" cy="50%" r="60%">
+            <stop offset="0%" stop-color="#E8B872" />
+            <stop offset="100%" stop-color="#C28A3A" />
+          </radialGradient>
+          <radialGradient id="ball-grad" cx="35%" cy="35%" r="65%">
+            <stop offset="0%" stop-color="#FFFFFF" />
+            <stop offset="100%" stop-color="#F0E68C" />
+          </radialGradient>
+        </defs>
+
+        <rect x="0" y="0" width="400" height="420" fill="#87CEEB" />
+        <path d="M 200 380 L 30 200 A 220 220 0 0 1 370 200 Z" fill="url(#grass-grad)" />
+
+        <g opacity="0.4">
+          <circle cx="80" cy="160" r="3" fill="#3B6D11" />
+          <circle cx="320" cy="160" r="3" fill="#3B6D11" />
+          <circle cx="120" cy="130" r="2.5" fill="#3B6D11" />
+          <circle cx="280" cy="130" r="2.5" fill="#3B6D11" />
+          <circle cx="200" cy="100" r="3" fill="#3B6D11" />
+          <circle cx="60" cy="250" r="3" fill="#3B6D11" />
+          <circle cx="340" cy="250" r="3" fill="#3B6D11" />
+          <circle cx="200" cy="380" r="2.5" fill="#3B6D11" />
+        </g>
+
+        <path d="M 200 350 Q 195 348 100 250 Q 98 245 100 240 L 195 145 Q 200 142 205 145 L 300 240 Q 302 245 300 250 L 205 348 Q 202 350 200 350 Z"
+              fill="url(#dirt-grad)" stroke="#8B5E2B" stroke-width="2" />
+
+        <path d="M 200 350 L 100 245 L 200 145 L 300 245 Z"
+              fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.9" />
+
+        <ellipse cx="200" cy="248" rx="28" ry="22" fill="#D49A4E" stroke="#8B5E2B" stroke-width="1.5" />
+        <ellipse cx="200" cy="246" rx="22" ry="16" fill="#E8B872" opacity="0.7" />
+
+        <g id="base-1" class="base" data-base="1B">
+          <rect x="282" y="227" width="36" height="36" rx="4" fill="#FFFFFF" stroke="#2C2C2A" stroke-width="2.5" />
+          <rect x="286" y="231" width="28" height="28" rx="2" fill="#FFFFFF" stroke="#888780" stroke-width="0.5" />
+          <text x="300" y="217" text-anchor="middle" font-size="14" font-weight="700" fill="#FFFFFF" stroke="#2C2C2A" stroke-width="3" paint-order="stroke">1st</text>
+        </g>
+        <g id="base-2" class="base" data-base="2B">
+          <rect x="182" y="127" width="36" height="36" rx="4" fill="#FFFFFF" stroke="#2C2C2A" stroke-width="2.5" />
+          <rect x="186" y="131" width="28" height="28" rx="2" fill="#FFFFFF" stroke="#888780" stroke-width="0.5" />
+          <text x="200" y="117" text-anchor="middle" font-size="14" font-weight="700" fill="#FFFFFF" stroke="#2C2C2A" stroke-width="3" paint-order="stroke">2nd</text>
+        </g>
+        <g id="base-3" class="base" data-base="3B">
+          <rect x="82" y="227" width="36" height="36" rx="4" fill="#FFFFFF" stroke="#2C2C2A" stroke-width="2.5" />
+          <rect x="86" y="231" width="28" height="28" rx="2" fill="#FFFFFF" stroke="#888780" stroke-width="0.5" />
+          <text x="100" y="217" text-anchor="middle" font-size="14" font-weight="700" fill="#FFFFFF" stroke="#2C2C2A" stroke-width="3" paint-order="stroke">3rd</text>
+        </g>
+        <g id="base-home" class="base" data-base="Home">
+          <polygon points="182,338 218,338 218,355 200,370 182,355" fill="#FFFFFF" stroke="#2C2C2A" stroke-width="2.5" />
+          <text x="200" y="328" text-anchor="middle" font-size="13" font-weight="700" fill="#FFFFFF" stroke="#2C2C2A" stroke-width="3" paint-order="stroke">Home</text>
+        </g>
+        <g id="base-pitcher" class="base" data-base="Pitcher">
+          <circle cx="200" cy="248" r="14" fill="#FFFFFF" stroke="#2C2C2A" stroke-width="2.5" />
+        </g>
+
+        <g id="fielder" hidden>
+          <ellipse id="fielder-shadow" cx="0" cy="0" rx="14" ry="4" fill="#000000" opacity="0.2" />
+          <circle id="fielder-body" cx="0" cy="0" r="11" fill="#534AB7" stroke="#2C2C2A" stroke-width="2" />
+          <circle id="fielder-head" cx="0" cy="0" r="7" fill="#FDD7B0" stroke="#2C2C2A" stroke-width="1.5" />
+          <ellipse id="fielder-hat" cx="0" cy="0" rx="8" ry="2.5" fill="#534AB7" stroke="#2C2C2A" stroke-width="1.5" />
+          <circle id="fielder-eye1" cx="0" cy="0" r="1.2" fill="#2C2C2A" />
+          <circle id="fielder-eye2" cx="0" cy="0" r="1.2" fill="#2C2C2A" />
+          <path id="fielder-smile" d="M 0 0 Q 0 0 0 0" stroke="#2C2C2A" stroke-width="1.2" fill="none" stroke-linecap="round" />
+          <circle id="fielder-glove" cx="0" cy="0" r="5" fill="#8B5E2B" stroke="#2C2C2A" stroke-width="1.5" />
+        </g>
+
+        <g id="runners"></g>
+
+        <path id="throw-path" d="" fill="none" stroke="#1D9E75" stroke-width="3.5" stroke-dasharray="6 4" stroke-linecap="round" opacity="0.7" hidden />
+
+        <g id="flying-ball" hidden>
+          <circle cx="0" cy="0" r="7" fill="url(#ball-grad)" stroke="#A0522D" stroke-width="1.2" />
+          <path d="M -5 -2 Q 0 -4 5 -2" fill="none" stroke="#A0522D" stroke-width="1" />
+          <path d="M -5 2 Q 0 4 5 2" fill="none" stroke="#A0522D" stroke-width="1" />
+        </g>
+
+        <g id="celebration" hidden></g>
+      </svg>
+    </div>
+
+    <div id="feedback-box" class="feedback-box" hidden>
+      <p class="feedback-headline" id="feedback-headline"></p>
+      <p class="feedback-why" id="feedback-why"></p>
+      <p class="feedback-tip" id="feedback-tip"></p>
+    </div>
+
+    <div class="action-row">
+      <button id="next-btn" class="big-play-btn" hidden>Next play →</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch((err) => {
+          console.warn('Service worker registration failed:', err);
+        });
+      });
+    }
+  </script>
+</body>
+</html>

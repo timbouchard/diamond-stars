@@ -1,0 +1,31 @@
+{
+  "name": "Diamond Stars — Softball Fielding",
+  "short_name": "Diamond Stars",
+  "description": "A fun fielding game for young softball players. Pick a position, see the play, and learn where to throw.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFE9A8",
+  "theme_color": "#1D9E75",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
